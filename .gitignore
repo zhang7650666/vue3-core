@@ -15,4 +15,4 @@ wx-js.js*
 
 node_modules/
 dist/
-packages/
+packages/**/dist

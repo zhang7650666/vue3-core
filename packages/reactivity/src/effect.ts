@@ -1,3 +1,11 @@
+/*
+ * @Author: 张华伟 zhanghuawei@shengpay.com
+ * @Date: 2022-07-04 16:22:26
+ * @LastEditors: 张华伟 zhanghuawei@shengpay.com
+ * @LastEditTime: 2022-07-06 13:46:26
+ * @FilePath: /vue3-core/packages/reactivity/src/effect.ts
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 export let activeEffect = undefined;
 class ReactiveEffect {
   // 在实例上新增了active属性
@@ -84,3 +92,4 @@ export function trigger(target, type, key, value, oldVal) {
       }
     });
 }
+console.log(1111);
