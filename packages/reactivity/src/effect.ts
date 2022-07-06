@@ -7,12 +7,21 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 export let activeEffect = undefined;
+
+// 清空之前收集的effect
+function cleanupEffect(effect) {
+  const { deps } = effect; // deps里面装的都是属性对应的effect
+  for (let i = 0; i < deps.length; i++) {
+    deps[i].delete(effect); // 接触effect 重新收集依赖
+  }
+  effect.deps.length = 0;
+}
 class ReactiveEffect {
   // 在实例上新增了active属性
   public active = true; // effect 默认是激活状态
   public parent = null; // effect
   public deps = []; // 属性记录了effect  effect也记录了收集哪些属性，是一个多对多的关系
-  constructor(public cb) {
+  constructor(public cb, public scheduler) {
     this.cb = cb;
   }
   // 执行effect
@@ -28,6 +37,8 @@ class ReactiveEffect {
        */
       this.parent = activeEffect;
       activeEffect = this;
+      // 在执行用户函数之前，将之前收集的内容清空
+      cleanupEffect(this);
       return this.cb(); // 在后续proxy.get中取值的时候就可以获取到activeEffectle
     } finally {
       // 结束时清空activeEffect
@@ -35,17 +46,28 @@ class ReactiveEffect {
       this.parent = null;
     }
   }
+
+  // 停止依赖收集
+  stop() {
+    if (this.active) {
+      this.active = false;
+      cleanupEffect(this); // 清空之前收集的effect
+    }
+  }
 }
 
 /**!
  * effect 函数的作用： 主要是进行依赖收集
  */
-export function effect(cb) {
+export function effect(cb, options: any = {}) {
   // cb 根据状态变化，重新执行
 
   // 将cb做成响应式的
-  const _effect = new ReactiveEffect(cb);
+  const _effect = new ReactiveEffect(cb, options.scheduler);
   _effect.run(); // 默认先执行一下
+  const runner = _effect.run.bind(_effect); // 修改this指向，始终让this指向effect
+  runner.effect = _effect; // 向runner函数上挂载effect对象
+  return runner;
 }
 
 /**!
@@ -83,13 +105,22 @@ export function track(target, type, key) {
 export function trigger(target, type, key, value, oldVal) {
   const depsMap = targetMap.get(target);
   if (!depsMap) return; // 触发的值未在模板中使用
-  const effects = depsMap.get(key); // 获取属性对应的effect
-  effects &&
+  let effects = depsMap.get(key); // 获取属性对应的effect
+
+  // 在执行之前先拷贝一份在执行，解决引用关联的问题
+  if (effects) {
+    effects = new Set(effects);
     effects.forEach((effect) => {
       if (effect !== activeEffect) {
         // 只有当前的activeEffect 与effect不一致的时候才执行effect.run() 方法
-        effect.run();
+        if (effect.scheduler) {
+          console.log("hahahh");
+          // 如果有调度器函数 就调用调度器函数
+          effect.scheduler();
+        } else {
+          effect.run();
+        }
       }
     });
+  }
 }
-console.log(1111);

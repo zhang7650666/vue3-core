@@ -13,7 +13,6 @@ export const enum ReactiveFlags {
 export const mutableHandlers = {
   get(target, key, recevier) {
     if (key === ReactiveFlags.IS_REACTIVE) {
-      debugger;
       return true;
     }
 

@@ -8,8 +8,8 @@ export function reactive(target) {
     return;
   }
   // 判断当前对象是否已经被代理过了
+
   if (target[ReactiveFlags.IS_REACTIVE]) {
-    debugger;
     return target;
   }
 
