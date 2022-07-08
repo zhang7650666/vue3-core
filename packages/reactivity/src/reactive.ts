@@ -2,7 +2,13 @@ import { isObject } from "@vue/shared";
 import { mutableHandlers, ReactiveFlags } from "./baseHandler";
 const reactiveMap = new WeakMap(); // WeakMap 的key 必须是是一个对象
 
-export function reactive(target) {
+// 判断对象是否是响应式对象
+function isReactive(target) {
+  return !!(target && target[ReactiveFlags.IS_REACTIVE]);
+}
+
+// 响应式函数
+function reactive(target) {
   // target 是否是对象
   if (!isObject(target)) {
     return;
@@ -31,3 +37,5 @@ export function reactive(target) {
   reactiveMap.set(target, proxy);
   return proxy;
 }
+
+export { reactive, isReactive };

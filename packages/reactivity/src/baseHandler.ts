@@ -42,7 +42,6 @@ export const mutableHandlers = {
 
     let res = Reflect.get(target, key, recevier); // 这里可以监控到用户取值了
     if (isObject(res)) {
-      console.log("走进来了吗", res);
       return reactive(res); // 深度代理，性能好，取值就可以代理
     }
     /**!

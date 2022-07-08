@@ -77,7 +77,6 @@ function effect(cb, options: any = {}) {
 // 一个effect对用多个属性， 一个属性对应多个effect （多对多）
 const targetMap = new WeakMap();
 function track(target, type, key) {
-  console.log("依赖收集了吗", key, activeEffect);
   if (!activeEffect) return; // 只有在effect函数中用的响应式数据才做依赖收集
   /**!
    *  单向记录，指的是 属性记录了effect (这种情况存在的问题是，如果清楚了effect，相当于收集的依赖也被清楚了)

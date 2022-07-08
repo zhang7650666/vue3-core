@@ -63,4 +63,29 @@ const isArray = (arr) => {
  */
 
 const assign = Object.assign;
-export { isObject, isFn, isString, isNumber, isArray, assign };
+
+/**!
+ * @ desc: 循环遍历对象
+ * @ params: Object
+ * @ return: value
+ */
+
+const traversal = (target, set = new Set()) => {
+  // 遍历对象时考虑不要循环引用
+
+  // 判断遍历的对象如果不是对象直接返回
+  if (!isObject(target)) {
+    return target;
+  }
+  // 如果对象已经引用过了，直接返回
+  if (set.has(target)) {
+    return target;
+  }
+  set.add(target);
+  for (let key in target) {
+    traversal(target[key], set);
+  }
+  return target;
+};
+
+export { isObject, isFn, isString, isNumber, isArray, assign, traversal };
