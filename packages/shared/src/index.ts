@@ -8,10 +8,59 @@
  */
 /**!
  * @ desc: 判断数据类型是否是对象
- * @ params: any
+ * @ params: Object
  * @ return: boolean
  */
 
-export const isObject = (val) => {
+const isObject = (val) => {
   return typeof val === "object" && val !== null;
 };
+
+/**!
+ * @ desc: 判断是否是一个函数
+ * @ params: Function
+ * @ return: boolean
+ */
+
+const isFn = (fn) => {
+  return typeof fn === "function";
+};
+
+/**!
+ * @ desc: 判断是否是字符串
+ * @ params: String
+ * @ return: boolean
+ */
+
+const isString = (str) => {
+  return typeof str === "string";
+};
+
+/**!
+ * @ desc: 判断是否是数字
+ * @ params: Number
+ * @ return: boolean
+ */
+
+const isNumber = (num) => {
+  return typeof num === "number";
+};
+
+/**!
+ * @ desc: 判断是否是数组
+ * @ params: Array
+ * @ return: boolean
+ */
+
+const isArray = (arr) => {
+  return Array.isArray(arr);
+};
+
+/**!
+ * @ desc: 判断是否是assign
+ * @ params: Object
+ * @ return: boolean
+ */
+
+const assign = Object.assign;
+export { isObject, isFn, isString, isNumber, isArray, assign };

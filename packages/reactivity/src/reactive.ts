@@ -8,7 +8,13 @@ export function reactive(target) {
     return;
   }
   // 判断当前对象是否已经被代理过了
-
+  // console.log("ReactiveFlags000", ReactiveFlags.IS_REACTIVE, target);
+  console.log(
+    "00000",
+    target,
+    target[ReactiveFlags.IS_REACTIVE],
+    ReactiveFlags.IS_REACTIVE
+  );
   if (target[ReactiveFlags.IS_REACTIVE]) {
     return target;
   }
