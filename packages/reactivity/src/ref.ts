@@ -1,8 +1,8 @@
 /*
  * @Author: Hadwin zhanghuawei@shengpay.com
  * @Date: 2022-07-10 09:59:41
- * @LastEditors: Hadwin zhanghuawei@shengpay.com
- * @LastEditTime: 2022-07-10 10:57:03
+ * @LastEditors: 张华伟 zhanghuawei@shengpay.com
+ * @LastEditTime: 2022-07-27 15:50:11
  * @FilePath: \vue3-core\packages\reactivity\src\ref.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -42,8 +42,19 @@ const ref = (value) => {
   return new RefImpl(value);
 };
 
+// 结构响应式对象 （本质： 就是访问的是原始对象上的属性）
+class ObjectRefImpl {
+  constructor(public object, public key) {}
+  get value() {
+    return this.object[this.key];
+  }
+  set value(newVal) {
+    this.object[this.key] = newVal;
+  }
+}
+// 作用： 可以将reactive 对象中的属性转成ref
 const toRef = (object, key) => {
-  return new ObjectRefImpl();
+  return new ObjectRefImpl(object, key);
 };
 const toRefs = (object) => {
   // 判断value 是否是一个数组，如果是一个数组，创建一个全新的数组
@@ -54,4 +65,24 @@ const toRefs = (object) => {
   }
   return result;
 };
-export { ref };
+
+// 将ref 响应式属性转成reactive 对象的响应式属性
+
+const proxyRefs = (object) => {
+  return new Proxy(object, {
+    get(target, key, recevier) {
+      const res = Reflect.get(target, key, recevier);
+      return res.__v_isRef ? res.value : res;
+    },
+    set(target, key, value, recevier) {
+      const oldVal = object[key];
+      if (oldVal.__v_isRef) {
+        oldVal.value = value;
+        return true;
+      } else {
+        return Reflect.set(target, key, value, recevier);
+      }
+    },
+  });
+};
+export { ref, toRef, toRefs, proxyRefs };
