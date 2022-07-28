@@ -14,5 +14,5 @@ wx-js.js*
 *.sln
 
 node_modules/
-dist/
+# dist/
 # packages/**/dist

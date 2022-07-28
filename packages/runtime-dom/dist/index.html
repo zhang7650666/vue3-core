@@ -1,0 +1,56 @@
+<!--
+ * @Author: 张华伟 zhanghuawei@shengpay.com
+ * @Date: 2022-07-28 10:24:19
+ * @LastEditors: 张华伟 zhanghuawei@shengpay.com
+ * @LastEditTime: 2022-07-28 10:25:55
+ * @FilePath: /vue3-core/packages/runtime-dom/dist/index.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+    <!-- <script type="text/javascript" src="../../../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script> -->
+    <script type="text/javascript" src="../dist/runtime-dom.global.js"></script>
+    <script>
+        // const {createRenderer, h} = VueRuntimeDOM;
+        // // 生成渲染器
+        // const renderder = createRenderer({
+        //     // 创建元素
+        //     createElement(element) {
+        //         return document.createElement(element)
+        //     },
+        //     // 设置渲染文本
+        //     setElementText(el, text) {
+        //         el.innerHTML = text;
+        //     },
+        //     // 将元素插入到容器中
+        //     insert(el, container) {
+        //         container.appendChild(el);
+        //     },
+        //     // 元素喧嚷
+        //     patchProp(el, key, preValue, nextValue) {
+        //         console.log('patch', el, key, preValue, nextValue)
+        //         for(let subKey in nextValue) {
+        //             el[key][subKey] = nextValue[subKey]
+        //         }
+                
+        //     }
+        // });
+
+        // // 使用渲染器的渲染函数(render) 创建虚拟节点，并挂载到想要挂载的dom上
+        // renderder.render(h('h1', {style: {color: 'red'}},'hello world',), document.getElementById('app'))
+
+
+
+        const {renderOptions} = vueRuntimeDOM
+        console.log('test', renderOptions)
+    </script>
+</body>
+</html>         
