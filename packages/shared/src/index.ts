@@ -2,7 +2,7 @@
  * @Author: 张华伟 zhanghuawei@shengpay.com
  * @Date: 2022-07-04 14:15:15
  * @LastEditors: 张华伟 zhanghuawei@shengpay.com
- * @LastEditTime: 2022-07-04 14:18:25
+ * @LastEditTime: 2022-07-29 19:45:01
  * @FilePath: /vue3-plain/packages/shared/src/index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -88,4 +88,44 @@ const traversal = (target, set = new Set()) => {
   return target;
 };
 
-export { isObject, isFn, isString, isNumber, isArray, assign, traversal };
+/**
+ * 位运算
+ * & “与” 两位都为1时，结果才为1
+ * | “或” 两位都为0时，结果采薇0
+ * ^ “异或” 两位都为0，相异为1
+ * ~ "按位取反" 所有0变1 ，1变 0
+ * << "左移" 各二进位全部向左移若干位，高位丢弃，低位保留
+ * >> "右移"
+ */
+// 判断元素标签类型
+const enum ShapeFlags {
+  ELEMENT = 1, // 普通元素 (0000 0001)
+  FUNCTIONAL_COMPONENT = 1 << 1, // 函数组件 1 << 1 = 2 (0000 0010)
+  STATEFUL_COMPONENT = 1 << 2, // 状态组件  1 << 2 = 4 (0000 0100)
+  TEXT_CHILDREN = 1 << 3, // 文本儿子节点 1 << 3 = 8 (0000 1000)
+  ARRAY_CHILDREN = 1 << 4, // 数组节点  1 << 4 = 16 (0001 0000)
+  SLOTS_CHILDREN = 1 << 5, // 插槽节点 1 << 5 = 32 (0010 0000)
+  TELEPORT = 1 << 6, //
+  SUSPENSE = 1 << 7, // 14
+  COMPONENT_SHOULD_KEEP_ALIVE = 1 << 8, // 16
+  COMPONENT_KEPT_ALIVE = 1 << 9, // 18
+  COMPONENT = ShapeFlags.STATEFUL_COMPONENT | ShapeFlags.FUNCTIONAL_COMPONENT,
+}
+
+// | 或运算用于组合，  & 与运算用于判断是否包含（大于0 就表示包含）
+
+// 判断是否是虚拟节点
+const isVnode = (node) => {
+  return !!(node && node.__v_isVnode);
+};
+export {
+  isObject,
+  isFn,
+  isString,
+  isNumber,
+  isArray,
+  assign,
+  traversal,
+  ShapeFlags,
+  isVnode,
+};
