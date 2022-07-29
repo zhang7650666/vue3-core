@@ -40,17 +40,17 @@
         //         for(let subKey in nextValue) {
         //             el[key][subKey] = nextValue[subKey]
         //         }
-                
+
         //     }
         // });
 
         // // 使用渲染器的渲染函数(render) 创建虚拟节点，并挂载到想要挂载的dom上
-        // renderder.render(h('h1', {style: {color: 'red'}},'hello world',), document.getElementById('app'))
+        const {createRenderer, h, render} = vueRuntimeDOM
+        renderder.render(h('h1', {style: {color: 'red'}},'hello world',), document.getElementById('app'))
 
 
 
-        const {renderOptions} = vueRuntimeDOM
-        console.log('test', renderOptions)
+
     </script>
 </body>
-</html>         
+</html>

@@ -18,7 +18,7 @@ const patchEvent = (el, eventName, nextValue) => {
   // 向元素上增加私有属性 _vei (vue事件调用) 用来记录元素上绑定了哪些事件
     const invokers = el._vei || el._vei = { };
     const exits = invokers[eventName];
-    if (exits) {
+    if (exits && nextValue) {
         // 已经绑定过事件
         exits.value = nextValue;
     } else {
@@ -28,9 +28,11 @@ const patchEvent = (el, eventName, nextValue) => {
         if (nextValue) {
             const invoker = invokers[eventName] = crateInvoker(nextValue);
             el.addEventListener(event, invoker)
-        } else {
+        } else if(exits) {
             // 如果新值为空，需要将老值删除
-            
+            el.removeEventListener(event, exits);
+            invokers[eventName] = undefined; // 清楚缓存
+
         }
     }
 };

@@ -19,7 +19,7 @@ const patchProp = (el, key, preValue, nextValue) => {
     patchEvent(el, key, nextValue);
   } else {
     // 处理普通attr属性 el.setAttribute
-    patchAttr(el, key);
+    patchAttr(el, key, nextValue);
   }
 };
 
