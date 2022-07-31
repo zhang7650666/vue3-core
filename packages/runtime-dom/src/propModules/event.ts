@@ -16,7 +16,7 @@ function crateInvoker(cb) {
 const patchEvent = (el, eventName, nextValue) => {
   // 添加自定义事件，在自定义事件里面调用绑定的方法
   // 向元素上增加私有属性 _vei (vue事件调用) 用来记录元素上绑定了哪些事件
-    const invokers = el._vei || el._vei = { };
+    const invokers = el._vei || (el._vei = { });
     const exits = invokers[eventName];
     if (exits && nextValue) {
         // 已经绑定过事件
@@ -36,5 +36,7 @@ const patchEvent = (el, eventName, nextValue) => {
         }
     }
 };
-
+// const patchEvent = (el, eventName, nextValue) => {
+//     console.log('elllll', el)
+// }
 export { patchEvent };

@@ -46,11 +46,7 @@
 
         // // 使用渲染器的渲染函数(render) 创建虚拟节点，并挂载到想要挂载的dom上
         const {createRenderer, h, render} = vueRuntimeDOM
-        renderder.render(h('h1', {style: {color: 'red'}},'hello world',), document.getElementById('app'))
-
-
-
-
+        render(h('div', {style: {color: 'red'}},  'hello world'), document.getElementById('app'))
     </script>
 </body>
 </html>
