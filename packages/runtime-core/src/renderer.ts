@@ -1,4 +1,6 @@
+import { isString } from '@vue/shared';
 import { ShapeFlags } from '@vue/shared';
+import { createVnode, Text} from './vnode'
 
 // 创建渲染器
 const createRenderer = (renderOptions) => {
@@ -13,7 +15,6 @@ const createRenderer = (renderOptions) => {
         setText:hostSetText,
         // 查询
         querySelector:hostQuerySelector,
-
         // 获取父节点
         parentNode:hostParentNode,
         // 获取兄弟节点
@@ -29,9 +30,16 @@ const createRenderer = (renderOptions) => {
         // 挂载属性
         patchProp: hostPatchProp
     } = renderOptions;
+    const normalize = (child) =>{
+        if (isString(child)) {
+            return createVnode(Text, null, child)
+        }
+        return child
+    }
     // 循环遍历元素
     const mountChildren = (children, container) => {
         for (let i = 0; i < children.length; i++) {
+            normalize(children[i])
             patch(null, children[i], container)
         }
     }
@@ -56,23 +64,51 @@ const createRenderer = (renderOptions) => {
         }
         hostInsert(el, container); // 讲虚拟vnode 插入到容器中
     }
+
+    // 文本节点更新
+    const processText = (n1, n2, container) => {
+        if (n1 == null) {
+            // 文本节点初始化
+            n2.el = hostCreateText(n2.children);
+            hostInsert(n2.el, container)
+        }
+    }
     // patch
     const patch = (n1, n2, container) => {
-        debugger
         // 如果两个节点都相同，直接返回
         if (n1 === n2) return;
+        const {type, shapeFlage } = n2
         if (n2 == null) {
             // 说明是新创建节点
         } else {
-            // 节点更新
-            mountElement(n2, container)
+            console.log('type', type)
+            switch (type) {
+                case Text:
+                    // 文本更新
+                    processText(n1, n2, container)
+                    break;
+                default:
+                    if (shapeFlage & ShapeFlags.ELEMENT) {
+                        // 节点更新
+                        mountElement(n2, container)
+                    }
+            }
+
         }
     }
+     // 卸载逻辑
+    const unmount = (vnode) => {
+        hostRemove(vnode.el)
+    }
+
     // 虚拟DOM
     const render = (vnode, container) => {
         console.log('vnode', vnode, container)
         if (vnode == null) {
             // 清空节点
+            if (container._vnode) {
+                unmount(container._vnode)
+            }
         } else {
             // 创建更新节点  (container._vnode  存放的是老节点)  如果老节点存在就是更新，否则就是创建
             patch(container._vnode || null, vnode, container)

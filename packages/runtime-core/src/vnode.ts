@@ -8,7 +8,7 @@
  */
 
 import { isString, ShapeFlags, isArray } from "@vue/shared";
-
+const Text = Symbol('Text')
 const createVnode = (type, props, children = null) => {
   const shapeFlage = isString(type) ? ShapeFlags.ELEMENT : 0;
   /**
@@ -39,4 +39,4 @@ const createVnode = (type, props, children = null) => {
   return vnode;
 };
 
-export { createVnode };
+export { createVnode,Text };
