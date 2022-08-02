@@ -282,6 +282,11 @@ var vueRuntimeDOM = (() => {
           patch(null, c2[i], el, anchor);
           i++;
         }
+      } else if (i > len2 && i <= len1) {
+        while (i <= len1) {
+          unmount(c1[i]);
+          i++;
+        }
       }
     };
     const patchChildren = (n1, n2, el) => {

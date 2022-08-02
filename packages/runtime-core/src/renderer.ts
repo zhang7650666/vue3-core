@@ -148,6 +148,12 @@ const createRenderer = (renderOptions) => {
         patch(null, c2[i], el, anchor);
         i++;
       }
+    } else if (i > len2 && i <= len1) {
+      // 处理删除 (i比len2大，说明老节点比新节点多，需要删除多余的老节点（多余的老节点就是 i到len1 之间的)
+      while (i <= len1) {
+        unmount(c1[i]);
+        i++;
+      }
     }
   };
   // 子元素比较
