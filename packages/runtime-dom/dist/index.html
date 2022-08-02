@@ -2,7 +2,7 @@
  * @Author: 张华伟 zhanghuawei@shengpay.com
  * @Date: 2022-07-28 10:24:19
  * @LastEditors: 张华伟 zhanghuawei@shengpay.com
- * @LastEditTime: 2022-08-01 19:03:46
+ * @LastEditTime: 2022-08-02 19:16:23
  * @FilePath: /vue3-core/packages/runtime-dom/dist/index.html
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -46,10 +46,19 @@
 
         // // 使用渲染器的渲染函数(render) 创建虚拟节点，并挂载到想要挂载的dom上
         const {createRenderer, h, render, Text} = vueRuntimeDOM
-        render(h('div', {style: {color: 'red'}},  'hello world'), document.getElementById('app'));
+        render(h('ul', {style: {color: 'red'}},  [
+            h('li', {key: 'a'}, 'a'),
+            h('li', {key: 'b'}, 'b'),
+            h('li', {key: 'c'}, 'c'),
+        ]), document.getElementById('app'));
         // render(h(Text, 'world'), document.getElementById('app'))
         setTimeout(() => {
-            render(h('div', {style: {color: 'blue'}},  'hello world'), document.getElementById('app'));
+            render(h('ul', {style: {color: 'blue'}},  [
+            h('li', {key: 'a'}, 'a'),
+            h('li', {key: 'b'}, 'b'),
+            h('li', {key: 'd'}, 'd'),
+            h('li', {key: 'e'}, 'e'),
+            ]), document.getElementById('app'));
             // render(h(Text, 'hello'), document.getElementById('app'))
         }, 2000)
         
