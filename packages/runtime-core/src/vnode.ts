@@ -2,13 +2,17 @@
  * @Author: 张华伟 zhanghuawei@shengpay.com
  * @Date: 2022-07-29 10:07:15
  * @LastEditors: 张华伟 zhanghuawei@shengpay.com
- * @LastEditTime: 2022-07-29 20:04:22
+ * @LastEditTime: 2022-08-01 18:35:52
  * @FilePath: /vue3-core/packages/runtime-core/src/vnode.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 
 import { isString, ShapeFlags, isArray } from "@vue/shared";
-const Text = Symbol('Text')
+const Text = Symbol("Text");
+// 是否是相同节点
+const isSameVnode = (n1, n2) => {
+  return n1.type === n2.type && n1.key === n2.key;
+};
 const createVnode = (type, props, children = null) => {
   const shapeFlage = isString(type) ? ShapeFlags.ELEMENT : 0;
   /**
@@ -39,4 +43,4 @@ const createVnode = (type, props, children = null) => {
   return vnode;
 };
 
-export { createVnode,Text };
+export { createVnode, Text, isSameVnode };
