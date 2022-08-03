@@ -288,6 +288,32 @@ var vueRuntimeDOM = (() => {
           i++;
         }
       }
+      let s1 = i;
+      let s2 = i;
+      const keyToNewIndexMap = /* @__PURE__ */ new Map();
+      for (let i2 = s2; i2 < len2; i2++) {
+        keyToNewIndexMap.set(c2[i2].key, i2);
+      }
+      const toBePatched = len2 - s2 + 1;
+      const newIdxToOldIdxMap = new Array(toBePatched).fill(0);
+      for (let i2 = s1; i2 < len1; i2++) {
+        const oldChlid = c1[i2];
+        const newIndex = keyToNewIndexMap.get(oldChlid.key);
+        if (!!newIndex) {
+          unmount(oldChlid);
+        } else {
+          newIdxToOldIdxMap[newIndex - s2] = i2 + 1;
+          patch(oldChlid, c2[i2], el);
+        }
+      }
+      for (let i2 = toBePatched; i2 >= 0; i2--) {
+        const moveElIdx = i2 + s2;
+        const moveEl = c2[moveElIdx];
+        const anchor = moveElIdx + 1 < c2.length ? c2[moveElIdx + 1].el : null;
+        if (newIdxToOldIdxMap[i2] === 0) {
+        } else {
+        }
+      }
     };
     const patchChildren = (n1, n2, el) => {
       const c1 = n1 && n1.children;

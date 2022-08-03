@@ -155,6 +155,44 @@ const createRenderer = (renderOptions) => {
         i++;
       }
     }
+
+    // 乱序处理
+    let s1 = i;
+    let s2 = i;
+    // 创建映射表 (map中存的是新的元素的key值)
+    const keyToNewIndexMap = new Map();
+    for (let i = s2; i < len2; i++) {
+      keyToNewIndexMap.set(c2[i].key, i);
+    }
+
+    // 遍历剩余老节点，1、如果老节点的key在映射表中，说明老节点新节点中都存在，新老节点进行比较更新,  2、如果老节点没有在映射表中，创建新节点并插入，
+    const toBePatched = len2 - s2 + 1; // 剩下的新节点个数
+    const newIdxToOldIdxMap = new Array(toBePatched).fill(0); //为剩余没有比较过得新节点添加一个映射表，用来判断是否patch过
+    for (let i = s1; i < len1; i++) {
+      const oldChlid = c1[i];
+      const newIndex = keyToNewIndexMap.get(oldChlid.key);
+      if (!!newIndex) {
+        // 如果老节点不存在，直接删除
+        unmount(oldChlid);
+      } else {
+        // 用来标记老节点剩余元素的位置
+        newIdxToOldIdxMap[newIndex - s2] = i + 1;
+        // 两个节点都存在，进行比较
+        patch(oldChlid, c2[i], el);
+      }
+    }
+
+    // 位置移动(从后向前移动)
+    for (let i = toBePatched; i >= 0; i--) {
+      const moveElIdx = i + s2; // 要移动元素的索引
+      const moveEl = c2[moveElIdx]; // 要移动的元素
+      const anchor = moveElIdx + 1 < c2.length ? c2[moveElIdx + 1].el : null;
+      if (newIdxToOldIdxMap[i] === 0) {
+        // 说明这个元素是创建的
+      } else {
+        // 新老元素的节点已经穿件了
+      }
+    }
   };
   // 子元素比较
   const patchChildren = (n1, n2, el) => {
