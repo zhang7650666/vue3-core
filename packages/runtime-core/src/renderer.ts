@@ -189,9 +189,14 @@ const createRenderer = (renderOptions) => {
       const anchor = moveElIdx + 1 < c2.length ? c2[moveElIdx + 1].el : null;
       if (newIdxToOldIdxMap[i] === 0) {
         // 说明这个元素是创建的
+          patch(null, moveEl, el, anchor)
       } else {
         // 新老元素的节点已经穿件了
+          hostInsert(moveEl.el, el, anchor) // 这里会把所有的子节点都移动插入，浪费性能
       }
+
+        // 优化 连续递增子节点 （连续的节点不做移动）
+
     }
   };
   // 子元素比较
